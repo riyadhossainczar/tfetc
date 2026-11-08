@@ -7,7 +7,6 @@
 
 [![Go Version](https://img.shields.io/badge/go-%3E%3D1.20-blue.svg)](https://golang.org)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Android%20Termux-brightgreen.svg)](#prerequisites)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Speed](https://img.shields.io/badge/startup-%7E12ms-orange.svg)](#performance)
 
 </div>
@@ -221,9 +220,3 @@ sudo make uninstall
 # On Termux:
 make uninstall
 ```
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
