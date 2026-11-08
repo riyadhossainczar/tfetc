@@ -65,54 +65,47 @@ sudo dnf install fastfetch chafa golang git make -y
 
 ## 🚀 Installation & Building
 
-### 1. Clone Repository
+### Option 1: One-Line Install (Recommended)
+Automatically detects your platform (Linux / Android Termux) and architecture (x86_64 / ARM64), installing `tfetc` directly to your `$PATH`:
+```bash
+curl -sSL https://raw.githubusercontent.com/your-username/tfetc/main/install.sh | bash
+```
+
+### Option 2: Build from Source
 ```bash
 git clone https://github.com/your-username/tfetc.git
 cd tfetc
-```
 
-### 2. Build Binaries
-```bash
-# Build for your current machine (Linux x86_64)
-make build
-
-# Cross-compile for Android Termux (ARM64)
-make build-arm64
-
-# Build both architectures at once
-make all
-```
-
-### 3. Install System-Wide (Optional)
-```bash
 # On Linux:
 sudo make install
 
-# On Termux:
+# On Android Termux:
 make install
 ```
-This installs `tfetc` directly into your `$PATH` (`/usr/local/bin/tfetc` or `$PREFIX/bin/tfetc`).
+
+Once installed, the `tfetc` command is globally available everywhere. You never need to stay in or enter the project folder.
 
 ---
 
-## 💻 Usage & CLI Flags
+## 💻 Usage & Commands
 
-Run `tfetc` directly from your terminal:
+Run `tfetc` from any terminal directory:
 
 ```bash
-# Run with default dual-column layout
+# Standard dual-column fetch
 tfetc
 
-# Run in text-only mode (Column 0 flush, no image)
-tfetc --no-image
+# Text-only fetch (flush at Column 0, no image)
 tfetc -n
+tfetc --no-image
 
-# Show help information
-tfetc --help
+# View help and configuration guide
+tfetc help
 tfetc -h
+tfetc --help
 
-# Show version
-tfetc --version
+# View version
+tfetc version
 tfetc -v
 ```
 
@@ -200,6 +193,23 @@ end
                                    ▼
                    [ Single Atomic Stdout Write ]
                    Instantaneous ~12ms terminal render
+```
+
+---
+
+## 🗑️ Uninstallation
+
+To cleanly remove `tfetc` and its cache from your system:
+```bash
+curl -sSL https://raw.githubusercontent.com/your-username/tfetc/main/uninstall.sh | bash
+```
+Or from within the repository:
+```bash
+# On Linux:
+sudo make uninstall
+
+# On Termux:
+make uninstall
 ```
 
 ---

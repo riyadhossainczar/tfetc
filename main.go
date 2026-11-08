@@ -12,12 +12,14 @@ func printHelp() {
 	helpText := fmt.Sprintf(`tfetc v%s - Ultra-fast, Minimalist & Resilient Terminal System Fetcher in Go
 
 USAGE:
-  tfetc [FLAGS]
+  tfetc [COMMAND / FLAGS]
 
-FLAGS:
-  -n, --no-image     Disable image and display system info flush at Column 0
-  -h, --help         Display this help message and exit
-  -v, --version      Display version information and exit
+COMMANDS & FLAGS:
+  tfetc              Run system fetch with standard dual-column layout
+  tfetc -n           Disable image and display system info flush at Column 0
+  tfetc --no-image   Disable image (long flag)
+  tfetc help         Display this help message (or -h, --help)
+  tfetc version      Display version information (or -v, --version)
 
 ENVIRONMENT VARIABLES:
   TFETC_IMAGE        Path to custom image (.jpg, .png, .svg) or "none" to disable
@@ -27,11 +29,12 @@ ENVIRONMENT VARIABLES:
   TFETC_CONFIG       (Optional) Path to custom fastfetch JSONC config file
 
 EXAMPLES:
-  tfetc                        # Run with standard dual-column layout
-  tfetc --no-image             # Force no-image mode via CLI flag
-  tfetc -n                     # Short flag for no-image
-  TFETC_WIDTH=22 tfetc         # Adjust image width for narrower mobile screens
-  TFETC_IMAGE=none tfetc       # Force no-image mode via environment variable
+  tfetc                            # Run with standard dual-column layout
+  tfetc -n                         # Run with no image (Column 0 flush)
+  tfetc --no-image                 # Same as above
+  tfetc help                       # Show help instructions
+  TFETC_WIDTH=22 tfetc             # Adjust image width for narrower mobile screens
+  TFETC_IMAGE=none tfetc           # Force no-image mode via environment variable
   TFETC_FLT_BIN=~/bin/stamp tfetc  # Use custom timestamp/session binary
 `, Version)
 	fmt.Print(helpText)
@@ -46,10 +49,10 @@ func main() {
 
 	for _, arg := range os.Args[1:] {
 		switch arg {
-		case "-h", "--help":
+		case "-h", "--help", "help":
 			printHelp()
 			return
-		case "-v", "--version":
+		case "-v", "--version", "version":
 			printVersion()
 			return
 		case "-n", "--no-image":
