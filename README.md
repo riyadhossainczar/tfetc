@@ -123,54 +123,51 @@ You do not need to recompile `tfetc` to customize its appearance. Configure it o
 | `TFETC_FLT_BIN` | Path to custom binary or script for session stamping | Custom binary / System Timestamp | `export TFETC_FLT_BIN=~/bin/custom-stamp` |
 | `TFETC_CONFIG` | *(Optional)* Custom `fastfetch` JSONC config path | None (raw pipe mode) | `export TFETC_CONFIG=~/.config/fastfetch/custom.jsonc` |
 
-### Configuration Examples (Using `export`):
+### Configuration (Permanent Setup via `echo`):
+
+To configure your preferences permanently so they survive terminal restarts, simply run the corresponding `echo` commands for your shell:
 
 ```bash
 # 1. Set a custom image path:
-export TFETC_IMAGE=~/pictures/avatar.png
+echo 'export TFETC_IMAGE=~/wallpaper.jpg' >> ~/.zshrc
 
-# 2. Adjust dimensions for mobile / narrow terminals:
-export TFETC_WIDTH=22
-export TFETC_HEIGHT=20
+# 2. Adjust dimensions for mobile / narrow screens (Termux):
+echo 'export TFETC_WIDTH=22' >> ~/.zshrc
+echo 'export TFETC_HEIGHT=20' >> ~/.zshrc
 
-# 3. Set a custom FLT stamping binary:
-export TFETC_FLT_BIN=~/bin/custom-stamp
+# 3. Set a custom FLT session stamping binary:
+echo 'export TFETC_FLT_BIN=~/bin/main-arm64' >> ~/.zshrc
 
-# 4. Disable image (pure text flush at Column 0):
-export TFETC_IMAGE=none
+# 4. Disable image completely (pure text flush at Column 0):
+echo 'export TFETC_IMAGE=none' >> ~/.zshrc
+
+# 5. Run tfetc automatically when opening a terminal:
+echo 'tfetc' >> ~/.zshrc
 ```
+*(Note: If you are on Linux using Bash instead of Zsh, simply replace `~/.zshrc` with `~/.bashrc`).*
 
 ---
 
-## 🐚 Shell Startup Integration (Make Settings Permanent)
+## 🐚 Shell Startup Integration
 
-Running `export` directly in your terminal only lasts for that single open session. When you exit or restart Termux, temporary variables disappear.
-
-To make your settings **permanent** so `tfetc` launches automatically with your custom image and binary every time you open a terminal:
+To make `tfetc` launch with your custom settings every time you open Termux or a new terminal session, run these one-liners:
 
 ### In Android Termux / Zsh (`~/.zshrc`):
-Add the configuration to the bottom of your `~/.zshrc`:
 ```bash
-# Custom tfetc configuration
-export TFETC_IMAGE=~/path/to/your/image.jpg
-export TFETC_WIDTH=24
-export TFETC_HEIGHT=20
-export TFETC_FLT_BIN=~/path/to/your/main-arm64
-
-# Launch tfetc on shell startup
-tfetc
+echo 'export TFETC_IMAGE=~/wallpaper.jpg' >> ~/.zshrc
+echo 'export TFETC_WIDTH=24' >> ~/.zshrc
+echo 'export TFETC_HEIGHT=20' >> ~/.zshrc
+echo 'export TFETC_FLT_BIN=~/bin/main-arm64' >> ~/.zshrc
+echo 'tfetc' >> ~/.zshrc
 ```
 
 ### In Linux / Bash (`~/.bashrc`):
-Add the configuration to the bottom of your `~/.bashrc`:
 ```bash
-# Custom tfetc configuration
-export TFETC_IMAGE=~/pictures/avatar.png
-export TFETC_WIDTH=28
-export TFETC_FLT_BIN=~/bin/main-amd64
-
-# Launch tfetc on shell startup
-tfetc
+echo 'export TFETC_IMAGE=~/pictures/avatar.png' >> ~/.bashrc
+echo 'export TFETC_WIDTH=28' >> ~/.bashrc
+echo 'export TFETC_HEIGHT=24' >> ~/.bashrc
+echo 'export TFETC_FLT_BIN=~/bin/main-amd64' >> ~/.bashrc
+echo 'tfetc' >> ~/.bashrc
 ```
 
 ### In Fish (`~/.config/fish/config.fish`):
