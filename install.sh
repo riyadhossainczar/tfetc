@@ -66,34 +66,66 @@ echo -e "    Target Path  : ${TARGET_DIR}/tfetc"
 # 3. Obtain Binary
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TEMP_DIR"' EXIT
+TARGET_FILE="${TEMP_DIR}/tfetc"
 
+DOWNLOAD_SUCCESS=0
+
+# A. If inside cloned repository with Go source
 if [ -f "./main.go" ] && command -v go >/dev/null 2>&1; then
-    # Local build from source if running inside repository
     echo -e "${CYAN}==> Building binary from local Go source...${RESET}"
-    go build -ldflags="-s -w" -o "${TEMP_DIR}/tfetc" .
+    if go build -ldflags="-s -w" -o "$TARGET_FILE" .; then
+        DOWNLOAD_SUCCESS=1
+    fi
+# B. If inside cloned repository with prebuilt binary
 elif [ -f "./${BINARY_NAME}" ]; then
-    # Use existing local binary in repo
     echo -e "${CYAN}==> Using prebuilt local binary (${BINARY_NAME})...${RESET}"
-    cp "./${BINARY_NAME}" "${TEMP_DIR}/tfetc"
-else
-    # Download prebuilt binary from GitHub
-    DOWNLOAD_URL="${RAW_BASE}/${BINARY_NAME}"
-    echo -e "${CYAN}==> Downloading prebuilt ${TARGET_ARCH} binary from GitHub...${RESET}"
-    if command -v curl >/dev/null 2>&1; then
-        curl -sSL "$DOWNLOAD_URL" -o "${TEMP_DIR}/tfetc"
-    elif command -v wget >/dev/null 2>&1; then
-        wget -qO "${TEMP_DIR}/tfetc" "$DOWNLOAD_URL"
-    else
-        echo -e "${RED}[ERROR] Neither curl nor wget found. Please install one to continue.${RESET}"
-        exit 1
+    if cp "./${BINARY_NAME}" "$TARGET_FILE"; then
+        DOWNLOAD_SUCCESS=1
     fi
 fi
 
-chmod +x "${TEMP_DIR}/tfetc"
+# C. Download prebuilt binary from GitHub
+if [ $DOWNLOAD_SUCCESS -ne 1 ]; then
+    DOWNLOAD_URL="${RAW_BASE}/${BINARY_NAME}"
+    echo -e "${CYAN}==> Downloading prebuilt ${TARGET_ARCH} binary from GitHub...${RESET}"
+    if command -v curl >/dev/null 2>&1; then
+        if curl -sSLf "$DOWNLOAD_URL" -o "$TARGET_FILE" 2>/dev/null; then
+            DOWNLOAD_SUCCESS=1
+        fi
+    elif command -v wget >/dev/null 2>&1; then
+        if wget -qO "$TARGET_FILE" "$DOWNLOAD_URL" 2>/dev/null; then
+            DOWNLOAD_SUCCESS=1
+        fi
+    fi
+fi
+
+# D. Fallback: If prebuilt binary download failed, compile using Go if Go is available
+if [ $DOWNLOAD_SUCCESS -ne 1 ] && command -v go >/dev/null 2>&1; then
+    echo -e "${YELLOW}==> Prebuilt binary unavailable. Compiling from source via Go...${RESET}"
+    if GOBIN="$TEMP_DIR" go install "github.com/${REPO_OWNER}/${REPO_NAME}@latest" 2>/dev/null; then
+        if [ -f "${TEMP_DIR}/tfetc" ]; then
+            DOWNLOAD_SUCCESS=1
+        fi
+    fi
+fi
+
+# E. Verify binary integrity
+if [ $DOWNLOAD_SUCCESS -ne 1 ] || [ ! -s "$TARGET_FILE" ]; then
+    echo -e "${RED}[ERROR] Failed to obtain valid tfetc binary for ${TARGET_ARCH}.${RESET}"
+    echo -e "        Please ensure the prebuilt binary is published or install Go to compile:"
+    if [ $IS_TERMUX -eq 1 ]; then
+        echo -e "        Termux: ${CYAN}pkg install golang git make && git clone https://github.com/${REPO_OWNER}/${REPO_NAME}.git && cd ${REPO_NAME} && make install${RESET}"
+    else
+        echo -e "        Linux:  ${CYAN}sudo apt install golang git make && git clone https://github.com/${REPO_OWNER}/${REPO_NAME}.git && cd ${REPO_NAME} && sudo make install${RESET}"
+    fi
+    exit 1
+fi
+
+chmod +x "$TARGET_FILE"
 
 # 4. Install Binary to Target Path
 $SUDO mkdir -p "$TARGET_DIR"
-$SUDO cp "${TEMP_DIR}/tfetc" "${TARGET_DIR}/tfetc"
+$SUDO cp "$TARGET_FILE" "${TARGET_DIR}/tfetc"
 $SUDO chmod 755 "${TARGET_DIR}/tfetc"
 
 echo -e "${GREEN}==> Successfully installed tfetc to ${TARGET_DIR}/tfetc!${RESET}"

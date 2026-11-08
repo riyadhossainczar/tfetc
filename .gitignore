@@ -1,6 +1,4 @@
 # Binaries
-tfetc
-tfetc-arm64
 *.exe
 *.test
 
