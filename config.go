@@ -14,7 +14,7 @@ const (
 
 	// Chafa image rendering dimensions
 	DefaultImageWidth  = 31
-	DefaultImageHeight = 28
+	DefaultImageHeight = 26
 
 	// External FLT binary location (outputs custom session/device stamp)
 	DefaultFltBinary = "/workspaces/Serein-SE/store-global.location/specifier.local-termux.pev/mod_bin/main-amd64"
