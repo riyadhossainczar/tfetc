@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -33,7 +32,7 @@ var knownShells = map[string]bool{
 func getSystemTitle() string {
 	user := os.Getenv("USER")
 	if user == "" {
-		out, err := exec.Command("whoami").Output()
+		out, err := safeCommand("whoami").Output()
 		if err == nil {
 			user = strings.TrimSpace(string(out))
 		}
@@ -82,14 +81,14 @@ func getRealShell() string {
 
 	// 3. Query shell version via "<shell> --version"
 	version := ""
-	out, err := exec.Command(shellName, "--version").Output()
+	out, err := safeCommand(shellName, "--version").Output()
 	if err == nil {
 		m := versionRegex.FindString(string(out))
 		if m != "" {
 			version = m
 		}
 	} else {
-		outV, errV := exec.Command(shellName, "-v").Output()
+		outV, errV := safeCommand(shellName, "-v").Output()
 		if errV == nil {
 			m := versionRegex.FindString(string(outV))
 			if m != "" {
@@ -113,7 +112,7 @@ func FetchSystemInfo(cfg Config) ([]InfoItem, error) {
 		args = append(args, "--config", cfg.FastfetchConfig)
 	}
 
-	cmd := exec.Command("fastfetch", args...)
+	cmd := safeCommand("fastfetch", args...)
 	var outBuf bytes.Buffer
 	cmd.Stdout = &outBuf
 	_ = cmd.Run()
@@ -221,14 +220,9 @@ func FetchSystemInfo(cfg Config) ([]InfoItem, error) {
 // getFltValue executes the custom FLT binary or falls back to standard date format.
 func getFltValue(binaryPath string) string {
 	if binaryPath != "" {
-		resolvedPath := binaryPath
-		if !filepath.IsAbs(resolvedPath) && !strings.Contains(resolvedPath, string(filepath.Separator)) {
-			if lp, err := exec.LookPath(resolvedPath); err == nil {
-				resolvedPath = lp
-			}
-		}
+		resolvedPath := safeLookPath(binaryPath)
 		if fi, err := os.Stat(resolvedPath); err == nil && (fi.Mode()&0111 != 0) {
-			out, err := exec.Command(resolvedPath).Output()
+			out, err := safeCommand(resolvedPath).Output()
 			if err == nil {
 				res := strings.TrimSpace(string(out))
 				if res != "" {

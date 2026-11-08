@@ -4,7 +4,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -51,7 +50,7 @@ func RenderImage(cfg Config) []string {
 
 	// Cache miss or outdated: run chafa once
 	sizeArg := fmt.Sprintf("%dx%d", cfg.ImageWidth, cfg.ImageHeight)
-	cmd := exec.Command("chafa", cfg.ImagePath, "--size", sizeArg)
+	cmd := safeCommand("chafa", cfg.ImagePath, "--size", sizeArg)
 	outBytes, err := cmd.Output()
 	if err != nil || len(outBytes) == 0 {
 		return nil
