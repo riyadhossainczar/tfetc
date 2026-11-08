@@ -4,7 +4,7 @@
 # ==============================================================================
 set -e
 
-REPO_OWNER="${TFETC_REPO_OWNER:-your-username}"
+REPO_OWNER="${TFETC_REPO_OWNER:-riyadhossainczar}"
 REPO_NAME="tfetc"
 REPO_BRANCH="${TFETC_REPO_BRANCH:-main}"
 RAW_BASE="https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${REPO_BRANCH}"

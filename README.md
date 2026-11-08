@@ -68,12 +68,12 @@ sudo dnf install fastfetch chafa golang git make -y
 ### Option 1: One-Line Install (Recommended)
 Automatically detects your platform (Linux / Android Termux) and architecture (x86_64 / ARM64), installing `tfetc` directly to your `$PATH`:
 ```bash
-curl -sSL https://raw.githubusercontent.com/your-username/tfetc/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/riyadhossainczar/tfetc/main/install.sh | bash
 ```
 
 ### Option 2: Build from Source
 ```bash
-git clone https://github.com/your-username/tfetc.git
+git clone https://github.com/riyadhossainczar/tfetc.git
 cd tfetc
 
 # On Linux:
@@ -201,7 +201,7 @@ end
 
 To cleanly remove `tfetc` and its cache from your system:
 ```bash
-curl -sSL https://raw.githubusercontent.com/your-username/tfetc/main/uninstall.sh | bash
+curl -sSL https://raw.githubusercontent.com/riyadhossainczar/tfetc/main/uninstall.sh | bash
 ```
 Or from within the repository:
 ```bash
