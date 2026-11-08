@@ -123,40 +123,53 @@ You do not need to recompile `tfetc` to customize its appearance. Configure it o
 | `TFETC_FLT_BIN` | Path to custom binary or script for session stamping | Custom binary / System Timestamp | `export TFETC_FLT_BIN=~/bin/custom-stamp` |
 | `TFETC_CONFIG` | *(Optional)* Custom `fastfetch` JSONC config path | None (raw pipe mode) | `export TFETC_CONFIG=~/.config/fastfetch/custom.jsonc` |
 
-### One-Liner Inline Examples:
+### Configuration Examples (Using `export`):
+
 ```bash
-# Run with narrower image for small mobile screens:
-TFETC_WIDTH=22 TFETC_HEIGHT=20 tfetc
+# 1. Set a custom image path:
+export TFETC_IMAGE=~/pictures/avatar.png
 
-# Run with a specific wallpaper:
-TFETC_IMAGE=~/wallpapers/cyberpunk.png tfetc
+# 2. Adjust dimensions for mobile / narrow terminals:
+export TFETC_WIDTH=22
+export TFETC_HEIGHT=20
 
-# Run completely without image:
-TFETC_IMAGE=none tfetc
-# Or simply:
-tfetc -n
+# 3. Set a custom FLT stamping binary:
+export TFETC_FLT_BIN=~/bin/custom-stamp
+
+# 4. Disable image (pure text flush at Column 0):
+export TFETC_IMAGE=none
 ```
 
 ---
 
-## 🐚 Shell Startup Integration
+## 🐚 Shell Startup Integration (Make Settings Permanent)
 
-To display `tfetc` automatically whenever you open a new terminal session, add it to your shell configuration:
+Running `export` directly in your terminal only lasts for that single open session. When you exit or restart Termux, temporary variables disappear.
 
-### In Bash (`~/.bashrc`):
+To make your settings **permanent** so `tfetc` launches automatically with your custom image and binary every time you open a terminal:
+
+### In Android Termux / Zsh (`~/.zshrc`):
+Add the configuration to the bottom of your `~/.zshrc`:
 ```bash
-# Add to the bottom of ~/.bashrc
-# Optional customization:
-export TFETC_IMAGE=~/my_avatar.png
+# Custom tfetc configuration
+export TFETC_IMAGE=~/path/to/your/image.jpg
 export TFETC_WIDTH=24
+export TFETC_HEIGHT=20
+export TFETC_FLT_BIN=~/path/to/your/main-arm64
 
-# Launch tfetc
+# Launch tfetc on shell startup
 tfetc
 ```
 
-### In Zsh (`~/.zshrc`):
+### In Linux / Bash (`~/.bashrc`):
+Add the configuration to the bottom of your `~/.bashrc`:
 ```bash
-# Add to the bottom of ~/.zshrc
+# Custom tfetc configuration
+export TFETC_IMAGE=~/pictures/avatar.png
+export TFETC_WIDTH=28
+export TFETC_FLT_BIN=~/bin/main-amd64
+
+# Launch tfetc on shell startup
 tfetc
 ```
 
