@@ -34,8 +34,8 @@ func ComposeAndRender(cfg Config, imgLines []string, items []InfoItem) {
 
 	var sb strings.Builder
 	// 1. Clear screen & reset cursor: \033[2J\033[3J\033[H
-	// 2. Disable Auto-Wrap: \033[?7l
-	sb.WriteString("\033[2J\033[3J\033[H\033[?7l")
+	// 2. Hide cursor during draw, disable auto-wrap: \033[?25l\033[?7l
+	sb.WriteString("\033[2J\033[3J\033[H\033[?25l\033[?7l")
 
 	if !hasImage {
 		// When no image: everything starts flush at Column 0 with no left margin
@@ -80,8 +80,8 @@ func ComposeAndRender(cfg Config, imgLines []string, items []InfoItem) {
 		}
 	}
 
-	// 3. Re-enable Auto-Wrap: \033[?7h
-	sb.WriteString("\033[?7h")
+	// 3. Always restore cursor & re-enable auto-wrap: \033[?25h\033[?7h
+	sb.WriteString("\033[?25h\033[?7h")
 
 	// Single atomic write to stdout
 	fmt.Print(sb.String())

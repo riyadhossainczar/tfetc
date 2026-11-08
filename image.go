@@ -62,6 +62,9 @@ func RenderImage(cfg Config) []string {
 }
 
 func splitAnsiLines(raw string) []string {
+	// Strip any cursor control sequences emitted by chafa
+	raw = strings.ReplaceAll(raw, "\x1b[?25l", "")
+	raw = strings.ReplaceAll(raw, "\x1b[?25h", "")
 	raw = strings.TrimRight(raw, "\r\n")
 	rawLines := strings.Split(raw, "\n")
 	var lines []string
