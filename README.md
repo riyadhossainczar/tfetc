@@ -61,11 +61,6 @@ sudo pacman -S fastfetch chafa go git make
 sudo dnf install fastfetch chafa golang git make -y
 ```
 
-### 5. macOS (Homebrew)
-```bash
-brew install fastfetch chafa go make
-```
-
 ---
 
 ## 🚀 Installation & Building
@@ -129,7 +124,7 @@ You do not need to recompile `tfetc` to customize its appearance. Configure it o
 
 | Variable | Description | Default | Example |
 | :--- | :--- | :--- | :--- |
-| `TFETC_IMAGE` | Path to custom image (`.jpg`, `.png`, `.svg`) or `none` to disable | Local fallback / `mod_pic/t6.jpg` | `export TFETC_IMAGE=~/pictures/avatar.png`<br>`export TFETC_IMAGE=none` |
+| `TFETC_IMAGE` | Path to custom image (`.jpg`, `.png`, `.svg`) or `none` to disable | Column 0 (text-only) if missing/unset | `export TFETC_IMAGE=~/pictures/avatar.png`<br>`export TFETC_IMAGE=none` |
 | `TFETC_WIDTH` | Custom image column width in characters | `31` | `export TFETC_WIDTH=22` |
 | `TFETC_HEIGHT` | Custom image row height in lines | `28` | `export TFETC_HEIGHT=20` |
 | `TFETC_FLT_BIN` | Path to custom binary or script for session stamping | Custom binary / System Timestamp | `export TFETC_FLT_BIN=~/bin/custom-stamp` |

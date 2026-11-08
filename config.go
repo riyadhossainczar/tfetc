@@ -91,28 +91,10 @@ func LoadConfig() Config {
 		cfg.FastfetchConfig = expandPath(envCfg)
 	}
 
-	// If the image path does not exist on disk, check local default_avatar.svg or clear it
+	// If the image path does not exist on disk, clear it so everything renders flush at Column 0
 	if cfg.ImagePath != "" {
 		if _, err := os.Stat(cfg.ImagePath); os.IsNotExist(err) {
-			foundFallback := false
-			// Check next to executable
-			if exePath, err := os.Executable(); err == nil {
-				localSvg := filepath.Join(filepath.Dir(exePath), "default_avatar.svg")
-				if _, err := os.Stat(localSvg); err == nil {
-					cfg.ImagePath = localSvg
-					foundFallback = true
-				}
-			}
-			// Check current working directory
-			if !foundFallback {
-				if _, err := os.Stat("default_avatar.svg"); err == nil {
-					cfg.ImagePath = "default_avatar.svg"
-					foundFallback = true
-				}
-			}
-			if !foundFallback {
-				cfg.ImagePath = ""
-			}
+			cfg.ImagePath = ""
 		}
 	}
 
